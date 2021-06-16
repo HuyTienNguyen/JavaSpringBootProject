@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,21 +16,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	// handling specific exception
-	/* @ExceptionHandler(ResourceNotFoundException) */
-
 	// handling custom validation errors
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Map<String, String>> customValidationErrorHandling(MethodArgumentNotValidException exception) {
+	public ResponseEntity<Map<String, String>> customValidationErrorHandling(
+			MethodArgumentNotValidException exception) {
 		Map<String, String> errors = new HashMap<>();
-        for (FieldError error : exception.getFieldErrors()) {
+		for (FieldError error : exception.getFieldErrors()) {
 			String fieldName = error.getField();
 			String errorMessage = error.getDefaultMessage();
 			errors.put(fieldName, errorMessage);
-         }
+		}
 		return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
 	}
+
+
 
 }

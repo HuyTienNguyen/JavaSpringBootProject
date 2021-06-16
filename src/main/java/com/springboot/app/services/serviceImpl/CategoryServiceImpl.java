@@ -7,7 +7,9 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Service;
 
 import com.springboot.app.domain.Category;
@@ -17,7 +19,6 @@ import com.springboot.app.services.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
 	@Autowired
 	CategoryRepository categoryRepository;
 	@Autowired
@@ -26,8 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<CategoryDto> findAll() {
 		 String sql = "select new com.springboot.app.dto.CategoryDto(entity) from Category as entity where (1=1) ";
-		 // select * from categorry as entity w
-		 // getlisst
 		 Query q =  entityManager.createQuery(sql,CategoryDto.class);
 		 
 		 return q.getResultList();

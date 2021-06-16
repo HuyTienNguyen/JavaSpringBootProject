@@ -7,22 +7,25 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "Users")
-public class User {
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "userId")
+public class Users {
 	@Id
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "userId")
+	private Long userId;
 	
 	@Column(name = "username", unique = true , nullable = false)
 	private String username;
@@ -37,7 +40,7 @@ public class User {
 	private String fullName;
 	
 	@Column(name = "numberphone", unique= true, nullable = false)
-	private int numberPhone;
+	private String numberPhone;
 
 	@Column(name = "address", nullable = false)
 	private String address;
@@ -48,22 +51,40 @@ public class User {
 	@Column(name = "birthday")
 	private Date birthDay;
 	
-	@Column(name = "images")
+	@Column(name = "images", length = 100, nullable = true)
 	private String images;
 	
 	@Column(name = "enabled")
 	private boolean enabled;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+	private Set<Users_Roles> users_roles = new HashSet<>();
 
-	public Long getId() {
-		return id;
+	public Users() {
+		
+	}
+	
+	public Users(Long userId, String username, String password, String email, String fullName, String numberPhone,
+			String address, int gender, Date birthDay, String images, boolean enabled) {
+		this.userId = userId;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.fullName = fullName;
+		this.numberPhone = numberPhone;
+		this.address = address;
+		this.gender = gender;
+		this.birthDay = birthDay;
+		this.images = images;
+		this.enabled = enabled;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -98,11 +119,11 @@ public class User {
 		this.fullName = fullName;
 	}
 
-	public int getNumberPhone() {
+	public String getNumberPhone() {
 		return numberPhone;
 	}
 
-	public void setNumberPhone(int numberPhone) {
+	public void setNumberPhone(String numberPhone) {
 		this.numberPhone = numberPhone;
 	}
 
@@ -146,13 +167,23 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	public Set<Users_Roles> getUsers_roles() {
+		return users_roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setUsers_roles(Set<Users_Roles> users_roles) {
+		this.users_roles = users_roles;
 	}
+
+	@Override
+	public String toString() {
+		return "Users [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", fullName=" + fullName + ", numberPhone=" + numberPhone + ", address=" + address + ", gender="
+				+ gender + ", birthDay=" + birthDay + ", images=" + images + ", enabled=" + enabled + ", users_roles="
+				+ users_roles + "]";
+	}
+
+	
 	
 	
 }

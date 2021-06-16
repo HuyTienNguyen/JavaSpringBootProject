@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin}">
+<head>
+<title>Welcome to Our Site</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<section class="content">
+			<div class="container-fluid">
+				<h1>Spring Boot - Multiple file upload example - AJAX</h1>
+
+				<form method="POST" enctype="multipart/form-data"
+					th:action="@{/brands/save}" th:object="${brand}">
+
+					<label>Logo:</label> <br /> <input type="file" name="fileImage"
+						id="fileImage" accept="image/png, image/jpeg" /><br /> <br /> 
+						<p> <img alt="Logo Preview" id="thumbnail" src=""> </p> <br>
+						<input
+						type="submit" value="Submit" id="btnSubmit" />
+				</form>
+
+			</div>
+		</section>
+	</div>
+
+
+
+	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#fileImage').change(function(){
+					showImageThumbnail(this);
+				});
+			});
+			
+			function showImageThumbnail(fileInput){
+				file = fileInput.files[0];
+				reader = new FileReader();
+ 				
+ 				reader.onload = function(e){
+					$("#thumbnail").attr('src',e.target.result);
+				}; 
+				
+				reader.readAsDataURL(file); 
+			}
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,24 +1,437 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/admin}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin}">
 <head>
-    <title>Welcome to Our Site</title>
+<title>Welcome to Our Site</title>
 </head>
 <body>
 
-<div layout:fragment="content">
-    <section class="my-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Welcome to Our Site</h1>
-                    <p>Index user</p>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
+	<div layout:fragment="content">
+		<section class="content">
+			<div class="container-fluid">
 
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Welcome to Our Site</h1>
+						<h4>Users</h4>
+
+
+					</div>
+				</div>
+
+				<div class="row justify-content-end">
+
+					<div class="mb-md-2">
+						<a href=""> <span> <a
+								onclick="event.preventDefault();addUser();" href="#"
+								class="btn btn-success" data-toggle="modal"><i
+									class="material-icons">&#xE147;</i> <span>Thêm người
+										dùng</span></a>
+						</span>
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="table-responsive">
+						<!--HTML table-->
+						<table class="table table-striped table-bordered table-hover"
+							id="roletable">
+							<thead>
+								<tr>
+									<th style="text-align: center">Id</th>
+									<th style="text-align: center">Name</th>
+									<th style="text-align: center">Email</th>
+									<th style="text-align: center">Phone</th>
+									<th style="text-align: center">Address</th>
+									<th style="text-align: center">Gender</th>
+									<th style="text-align: center">Birthday</th>
+									<th style="text-align: center">Image</th>
+									<th style="text-align: center">Enabled</th>
+									<th style="text-align: center">Role</th>
+									<th style="text-align: center">Optional</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Add Task Modal Form HTML -->
+		<form action="" method="" class="frmUser" id="frmUser">
+			<input type="hidden"  value="{{ csrf_token() }}">
+
+			<div class="modal fade" id="modal" role="dialog">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+
+
+						<div class="modal-header">
+
+							<h4 class="modal-title"></h4>
+							<button aria-hidden="true" class="close title-modal"
+								data-dismiss="modal" type="button">Users</button>
+						</div>
+						<div class="container">
+							<div class="row">
+								<div class="col-lg-6 col-sm-12">
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Username </label> <input class="form-control"
+												name="username" type="text" id="txtUsername"> </input> <span
+												style="color: red" id="errUsername"></span>
+										</div>
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Password </label> <input class="form-control"
+												name="password" type="text" id="txtPassword"> </input> <span
+												style="color: red" id="errPassword"></span>
+										</div>
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Confirm Password </label> <input class="form-control"
+												name="repassword" type="text" id="txtRepassword"> </input> <span
+												style="color: red" id="errRepassword"></span>
+										</div>
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Full Name </label> <input class="form-control"
+												name="fullName" type="text" id="txtName"> </input> <span
+												style="color: red" id="errName"></span>
+										</div>
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Email </label> <input class="form-control"
+												name="email" type="email" id="txtEmail"> </input> <span
+												style="color: red" id="errEmail"></span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Phone </label> <input class="form-control"
+												name="phone" type="text" id="txtPhone"> </input> <span
+												style="color: red" id="errPhone"></span>
+
+										</div>
+
+									</div>
+								</div>
+								<div class="col-lg-6 col-sm-12">
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Address </label> <input class="form-control"
+												name="address" type="text" id="txtAddress"> </input> <span
+												style="color: red" id="errAddress"></span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Gender </label> <select id="sGender"
+												class="form-control" name="gender">
+												<option value="1" selected>Nam</option>
+												<option value="0">Nữ</option>
+											</select>
+
+										</div>
+
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> BirthDay </label> <input class="form-control"
+												name="birthday" type="text" id="txtBirthday"> </input> <span
+												style="color: red" id="errBirthday"></span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label> Image </label> <input class="form-control"
+												name="fileImage" type="file" id="txtFile"> </input> <span
+												style="color: red" id="errFile"></span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-body">
+										<div class="form-group">
+											<label style="display:block"> Role </label> 
+											<select
+												class="select-multiple-role" name="states[]"
+												multiple="multiple" style="width: 100%" id="txtRole">
+												<option value="">aaa</option>
+											</select> 
+											<span style="color: red" id="errRole"></span>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<input type="hidden" id="userId" name="userId" />
+							 <input
+								class="btn btn-default" data-dismiss="modal" type="button"
+								value="Cancel">
+							<button class="btn btn-info ship-btn-save" id="btnSubmit"
+								type="submit" value="add">Save Unit</button>
+							</input>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript"
+			th:src="@{/common/js/admin-user/user.js}"></script>
+		<script>
+			$(document)
+					.ready(
+							function() {
+								//load datatable
+								let urlUser = "/sample/admin/user";
+								$("#roletable")
+										.DataTable(
+												{
+													"responsive" : true,
+													ajax : {
+														"url" : urlUser
+																+ "/getUsers",
+														"type" : "GET",
+														dataSrc : ""
+													},
+													"columnDefs" : [ {
+														"className" : "dt-center",
+														"targets" : [ 0, 1, 2 ],
+														"orderable" : true
+													} ],
+													"columns" : [
+															{
+																"data" : "userId"
+															},
+															{
+																"data" : "fullName"
+															},
+															{
+																"data" : "email"
+															},
+															{
+																"data" : "numberPhone"
+															},
+															{
+																"data" : "address"
+															},
+															{
+																"data" : "gender",
+																render : function(
+																		data) {
+																	if (data == 1)
+																		return "Nam";
+																	return "Nữ";
+																}
+															},
+															{
+																"data" : "birthDay"
+															},
+															{
+																"data" : "images",
+																render : function(
+																		data,
+																		type,
+																		row,
+																		meta) {
+																	return '<img src="http://localhost:8092/sample/dist/img/user/'+data+'" alt="'+data+'" width="50" height="50">';
+																}
+															},
+															{
+																"data" : "enabled",
+																render : function(
+																		data) {
+																	if (data == "1")
+																		return '<input type="checkbox" class="my_switch" checked data-toggle="toggle" data-size="small" data-off="Disabled" data-on="Enable" >';
+
+																	return '<input type="checkbox" class="my_switch" data-toggle="toggle" data-size="small" data-off="Disabled"> data-on="Enable"';
+
+																}
+															},
+															{
+																"data" : "users_roles",
+																render : function(
+																		data) {
+																	var text = "<select>";
+																	for (i = 0; i < data.length; i++) {
+																		if (data[i] != "user") {
+																			text += "<option value = "+ data[i].role.roleId +">"
+																					+ data[i].role.name
+																					+ "</option>";
+																		}
+																	}
+																	text += "</select>";
+																	return text;
+																}
+															},
+															{
+																"data" : "userId",
+																render : function(
+																		data,
+																		type,
+																		full) {
+																	return '<a onclick="event.preventDefault();editRole('
+																			+ data
+																			+ ');" class = "btn btn-info btn-sm" href="#"> Edit </a>';
+																}
+															} ],
+													"fnDrawCallback" : function() {
+														//su dung toogle
+														$('.my_switch')
+																.bootstrapToggle();
+
+														// lay du lieu tu toggle
+														/* $('.my_switch')
+																.change(
+																		function() {
+																			$(
+																					'.my_switch')
+																					.bootstrapToggle(
+																							{
+																								on : 'Enabled',
+																								off : 'Disabled'
+																							});
+																		}); */
+													}
+
+												});
+								//enable select2
+								$('.select-multiple-role').select2({
+									placeholder: "Select roles",
+								    allowClear: true
+								});
+								loadDataSelectRole();
+								
+							});
+			//ajax process insert or update
+			var $form = $("#frmUser");
+			$form.on('submit', function(e) {
+				e.preventDefault();
+				
+                var Id = $('#suplierId').val();
+                
+                
+                
+                
+                
+                var data = $('#frmUser').serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+                
+                console.log(data);
+                
+                
+                
+                /* var unindexed_array = $('#frmUser').serializeArray();
+                var indexed_array = {};
+
+                $.map(unindexed_array, function(n, i){
+                    indexed_array[n['name']] = n['value'];
+                });
+                
+                console.log(indexed_array); */
+
+                
+                
+                
+                
+                
+                
+                
+                
+                var type = $(this).attr('method');
+				var url = (type == "POST") ? '/sample/admin/user' : '/sample/admin/user/' + Id;
+				$.ajax({
+					type : type,
+					contentType : 'application/json;charset=utf-8',
+					url : url,
+					data : JSON.stringify(data),
+					success : function(data) {
+						alert("success");
+						console.log(data);
+					},
+					error : function(response) {
+						alert("fail");
+						console.log(response);
+					}
+				})
+
+			});
+			//function load data into select2
+			function loadDataSelectRole() {
+				var url = '/sample/admin/role/getRole';
+				callAjax(url,'GET')
+				.then(function (data) {
+					var option = "";
+					for (var i = 0; i < data.length; i++) {
+						option += "<option value='"+ data[i].roleId+ "'>"
+								+ data[i].name + "</option>";
+
+					}
+					$(".select-multiple-role").append(option);
+           		})
+            	.catch(function (xhr, status, error) {
+            		alert('error');
+            	});
+			}
+			
+			//function get value of selectRole
+			function getDataSelectRole(){
+				var data = $(".select-multiple-role").select2('data');
+				var jsonArr = [];
+
+				for (var i = 0; i < data.length; i++) {
+				    jsonArr.push({
+				         role:{roleId:parseInt(data[i].id)}
+				    }); 
+				}
+				console.log(jsonArr);
+			}
+			
+			//add user
+			function addUser(){
+				$("#modal").modal('show');
+				$('.title-modal').text('Thêm người dùng');
+				$('#frmUser').attr('method', 'POST');
+				resetDataOnForm();
+			}
+
+			//hàm reset dữ liệu về trống trên form
+			function resetDataOnForm() {
+				$('#frmUser')[0].reset();
+			}
+		</script>
+	</th:block>
 </body>
 </html>

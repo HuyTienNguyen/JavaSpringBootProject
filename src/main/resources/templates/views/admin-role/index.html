@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/admin}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin}">
 <head>
-    <title>Welcome to Our Site</title>
+<title>Welcome to Our Site</title>
 </head>
 <body>
 
@@ -22,7 +22,8 @@
 					<div class="mb-md-2">
 						<a href=""> <span> <a
 								onclick="event.preventDefault();addRole();" href="#"
-								class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm quyền</span></a>
+								class="btn btn-success" data-toggle="modal"><i
+									class="material-icons">&#xE147;</i> <span>Thêm quyền</span></a>
 						</span>
 						</a>
 					</div>
@@ -34,9 +35,9 @@
 							id="roletable">
 							<thead>
 								<tr>
-									<th width="30%" style="text-align:center">STT</th>
-									<th width="50%" style="text-align:center">Name</th>
-									<th style="text-align:center">Optional</th>
+									<th width="30%" style="text-align: center">STT</th>
+									<th width="50%" style="text-align: center">Name</th>
+									<th style="text-align: center">Optional</th>
 								</tr>
 							</thead>
 							<tbody></tbody>
@@ -57,14 +58,14 @@
 						<div class="modal-header">
 
 							<h4 class="modal-title"></h4>
-							<button aria-hidden="true" class="close title-modal" data-dismiss="modal"
-								type="button">Role</button>
+							<button aria-hidden="true" class="close title-modal"
+								data-dismiss="modal" type="button">Role</button>
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
 								<label> Name </label> <input class="form-control" name="name"
-									 type="text" id="txtName"> </input>
-								<span style="color:red" id="errName"></span>
+									type="text" id="txtName"> </input> <span style="color: red"
+									id="errName"></span>
 
 							</div>
 
@@ -75,6 +76,7 @@
 								value="Cancel">
 							<button class="btn btn-info ship-btn-save" id="btnSubmit"
 								type="submit" value="add">Save Unit</button>
+								<button class="btn btn-info ship-btn-save" type="button" value="resetForm" onclick="resetForm()">reset</button>
 							</input>
 						</div>
 
@@ -83,58 +85,67 @@
 			</div>
 		</form>
 	</div>
-	
-<th:block layout:fragment="script">
-		<script>
-			$(document).ready(function(){
-				//load datatable
-				let urlRole = "/sample/admin/role";
-				$("#roletable").DataTable(
-					{
-						"responsive" : true,
-						ajax: {
-							"url" : urlRole + "/getRole",
-							"type":"GET",
-							dataSrc: ""
-						},
-						"columnDefs": [
-					        {"className": "dt-center" , "targets": [0,1,2],"orderable": true}
-					      ],
-						"columns" : [
-							{
-								"data" : "id"	
-							},
-							{
-								"data" : "name"
-							},
-							{
-								"data" : "id",
-								render : function(data,type,full){
-									return '<a onclick="event.preventDefault();editRole('
-									+data
-									+ ');" class = "btn btn-info btn-sm" href="#"> Edit </a>';
-								}
-							}
-						]
-					}		
-				)
-			});
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			$(document)
+					.ready(
+							function() {
+								//load datatable
+								let urlRole = "/sample/admin/role";
+								$("#roletable")
+										.DataTable(
+												{
+													"responsive" : true,
+													ajax : {
+														"url" : urlRole
+																+ "/getRole",
+														"type" : "GET",
+														dataSrc : ""
+													},
+													"columnDefs" : [ {
+														"className" : "dt-center",
+														"targets" : [ 0, 1, 2 ],
+														"orderable" : true
+													} ],
+													"columns" : [
+															{
+																"data" : "roleId"
+															},
+															{
+																"data" : "name"
+															},
+															{
+																"data" : "roleId",
+																render : function(
+																		data,
+																		type,
+																		full) {
+																	return '<a onclick="event.preventDefault();editRole('
+																			+ data
+																			+ ');" class = "btn btn-info btn-sm" href="#"> Edit </a>';
+																}
+															} ]
+												})
+							});
 			//add role
-			function addRole(){
+			function addRole() {
 				$('#modal').modal('show');
 				$('.title-modal').text('Thêm quyền');
-				$('#frmRole').attr('method','POST');
+				$('#frmRole').attr('method', 'POST');
+				$('#txtName').val('');
+				$("#frmRole")[0].reset();
 			}
-			
+
 			//edit role
- 			function editRole(id){
+			function editRole(id) {
 				$.ajax({
-					type:'GET',
-					url: 'role/'+id,
-					success:function(data){
-		 				$('#modal').modal('show');
+					type : 'GET',
+					url : 'role/' + id,
+					success : function(data) {
+						$('#modal').modal('show');
 						$('.title-modal').text('Sửa quyền');
-						$('#frmRole').attr('method','PUT');
+						$('#frmRole').attr('method', 'PUT');
 						$('#roleId').val(id);
 						$('#txtName').val(data.name);
 					}
@@ -142,51 +153,48 @@
 			}
 			//Ajax process Insert or Update
 			var $form = $('#frmRole');
-			$form.on('submit',function(e){
+			$form.on('submit', function(e) {
+				e.preventDefault();
 				var Name = $('#txtName').val();
 				var Id = $("#roleId").val();
-				var data = {name : Name};
+				var data = {
+					name : Name
+				};
 				var type = $(this).attr('method');
-				var url = (type == "POST") ? '/sample/admin/role' : '/sample/admin/role/' + Id ;
-				e.preventDefault();
-				$.ajax({
-					type:type,
-					contentType: "application/json; charset=utf-8",
-					url : url,
-					data: JSON.stringify(data),
-					success : function(data){
-							$("#roletable").DataTable().ajax.reload();
-							alertify.notify('Thanh cong', 'success',5);
-					},
-				     error: function(xhr, status, error){
-				    	 var errors=xhr.responseJSON;
-				    	 var error_name=errors.name;
-				    	 if(error_name!=''&& error_name!=undefined){
-				    		 $("#errName").text(error_name);
-				    	 }
-				     }
-				});
-			});
-			
-			//ajax process email unique
-			$("#txtName").blur(function(){
-				var valName = $("#txtName").val();
-				$.ajax({
-					type: "POST",
-					contentType: "application/json; charset=utf-8",
-					url : "/sample/admin/role/validateName",
-					data : valName,
-					success: function(result){
-						if(result == 'Duplicate'){
-							$("#errName").text("Name already exists!");
-							$("#txtName").focus();
-							$("#btnSubmit").attr("disabled", true);
-						}
-						else{
-							$("#errName").text("");
-							$("#btnSubmit").attr("disabled", false);
-						}
+				var url = (type == "POST") ? '/sample/admin/role'
+						: '/sample/admin/role/' + Id;
+				
+				callAjax(url,type,JSON.stringify(data))
+				.then(function (data) {
+					$("#roletable").DataTable().ajax.reload();
+					showMessage("Thanh Cong", true);
+           		})
+            	.catch(function (xhr, status, error) {
+            		var errors = xhr.responseJSON;
+					var error_name = errors.name;
+					if (error_name != '' && error_name != undefined) {
+						$("#errName").text(error_name);
 					}
+            	});
+			});
+
+			//ajax process email unique
+			$("#txtName").blur(function() {
+				var valName = $("#txtName").val();
+				var url = "/sample/admin/role/validateName";
+				callAjax(url,"POST",valName)
+				.then(function (data){
+					if (data == 'Duplicate') {
+						$("#errName").text("Name already exists!");
+						$("#txtName").focus();
+						$("#btnSubmit").attr("disabled", true);
+					} else {
+						$("#errName").text("");
+						$("#btnSubmit").attr("disabled", false);
+					} 
+				})
+				.catch(function(response){
+					showMessage('That bai','false');
 				});
 			});
 		</script>

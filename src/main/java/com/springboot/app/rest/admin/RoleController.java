@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.springboot.app.domain.Role;
 import com.springboot.app.dto.RoleDto;
 import com.springboot.app.services.serviceImpl.RoleServiceImpl;
-
 @RestController
 @RequestMapping("/admin/role")
 public class RoleController {
@@ -46,13 +45,13 @@ public class RoleController {
 	
 	//get All
 	@RequestMapping(value = "/getRole", method = RequestMethod.GET)
-	public ResponseEntity<List<RoleDto>> getAll() {
-		//mapper Role => RoleDto
+	public ResponseEntity<?> getAll() {
+		//mapper Role => RoleD
 		List<Role> listRole = roleServiceImpl.getAll();
 		Type listType = new TypeToken<List<RoleDto>>() {}.getType();
 		List<RoleDto> RoleDtoList = mapper.map(listRole, listType);
 
-		return new ResponseEntity<List<RoleDto>>(RoleDtoList, HttpStatus.OK);
+		return new ResponseEntity<>(RoleDtoList, HttpStatus.OK);
 	}
 	
 	// get By Id
@@ -83,9 +82,10 @@ public class RoleController {
 		return new ResponseEntity<>(check, (check == true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 	
-	//hàm kiểm tra email
+	//hàm kiểm tra name
 	@RequestMapping(value = "/validateName", method = RequestMethod.POST)
 	public @ResponseBody String checkNameUnique(@RequestBody String name) {
 		return roleServiceImpl.checkNameUnqiue(name);
 	}
+	
 }

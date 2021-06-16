@@ -11,29 +11,42 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "Roles")
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "roleId")
+	private Long roleId;
 	
 	@Column(name = "name", unique = true,nullable = false)
 	private String name;
 	
-	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "roles")
-	Set<User> users = new HashSet<>();
+	/*
+	 * @JsonIgnore
+	 * 
+	 * @ManyToMany(fetch = FetchType.LAZY,mappedBy = "roles")
+	 */
+    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    Set<Users_Roles> users_roles = new HashSet<>();
 
-	public Long getId() {
-		return id;
+	
+	
+
+	public Long getRoleId() {
+		return roleId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
 	public String getName() {
@@ -43,18 +56,15 @@ public class Role {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
 
-	public Set<User> getUsers() {
-		return users;
+	public Set<Users_Roles> getUsers_roles() {
+		return users_roles;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
-	@Override
-	public String toString() {
-		return "Role [id=" + id + ", name=" + name + "]";
+	public void setUsers_roles(Set<Users_Roles> users_roles) {
+		this.users_roles = users_roles;
 	}
 	
 

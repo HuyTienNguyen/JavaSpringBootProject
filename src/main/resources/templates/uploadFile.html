@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin}">
+<head>
+<title>Welcome to Our Site</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<section class="content">
+			<div class="container-fluid">
+				<h1>Spring Boot - Multiple file upload example - AJAX</h1>
+
+				<form id="file-upload-form">
+					<label for="file-upload-input">Select file to upload</label> <input
+						type="file" id="file-upload-input" name="file">
+					<p> <img alt="Logo Preview" id="thumbnail" src=""> </p> <br>
+					<button type="submit">Start Upload</button>
+				</form>
+
+			</div>
+		</section>
+	</div>
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				// bind form submit event
+			    $("#file-upload-form").on("submit", function (e) {
+
+			        // cancel the default behavior
+			        e.preventDefault();
+					var url = 'file-upload';
+			        // use $.ajax() to upload file
+			        $.ajax({
+			            url: url,
+			            type: "POST",
+			            data: new FormData(this),
+			            enctype: 'multipart/form-data',
+			            processData: false,
+			            contentType: false,
+			            cache: false,
+			            success: function (res) {
+			                alert(res);
+			            },
+			            error: function (err) {
+			                alert(err);
+			            }
+			        });
+			    });
+			});
+		</script>
+	</th:block>
+</body>
+</html>

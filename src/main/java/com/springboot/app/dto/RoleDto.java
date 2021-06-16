@@ -6,16 +6,19 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class RoleDto {
-	private Long id;
+	private Long roleId;
 	@NotBlank(message = "Name is mandatory")
 	private String name;
 	
 	
-	public Long getId() {
-		return id;
+	
+	
+	
+	public Long getRoleId() {
+		return roleId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 	public String getName() {
 		return name;
@@ -23,8 +26,4 @@ public class RoleDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
-	
-
 }

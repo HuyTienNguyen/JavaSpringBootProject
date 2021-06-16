@@ -26,7 +26,7 @@ public class RoleServiceImpl implements IRoleService {
 	
 	@Override
 	public List<Role> getAll() {
-		return roleRepository.findAll();
+		return (List<Role>) roleRepository.findAll();
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class RoleServiceImpl implements IRoleService {
 		Optional<Role> roleData = roleRepository.findById(id);
 		if (roleData.isPresent()) {
 			Role saveRole = new Role();
-			saveRole.setId(id);
+			saveRole.setRoleId(id);
 			saveRole.setName(roles.getName());
 			Role check  = roleRepository.save(saveRole);
 			if(check != null) return true;
@@ -68,8 +68,13 @@ public class RoleServiceImpl implements IRoleService {
 
 	
 	public String checkNameUnqiue(String name) {
+		System.out.println(name);
 		List<Role> listRole = roleRepository.findByName(name);
 		return (listRole != null && listRole.size()>0) ? "Duplicate" : "empty";
+	}
+	
+	public Role findRoleById(Long roleId) {
+		return roleRepository.findByRoleId(roleId);
 	}
 	
 
