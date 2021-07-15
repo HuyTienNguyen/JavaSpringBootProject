@@ -51,4 +51,11 @@ public class Users_Roles_ID implements Serializable {
         return Objects.hash(getUserId(), getRoleId());
     }
 
+	@Override
+	public String toString() {
+		return "Users_Roles_ID [userId=" + userId + ", roleId=" + roleId + "]";
+	}
+    
+    
+
 }

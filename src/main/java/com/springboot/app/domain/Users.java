@@ -10,22 +10,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "Users")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "userId")
+
+  @JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,
+  property = "username")
+ 
 public class Users {
 	@Id
-	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "userId")
 	private Long userId;
+	
 	
 	@Column(name = "username", unique = true , nullable = false)
 	private String username;
@@ -57,13 +64,20 @@ public class Users {
 	@Column(name = "enabled")
 	private boolean enabled;
 	
-	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "users", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	private Set<Users_Roles> users_roles = new HashSet<>();
 
-	public Users() {
-		
-	}
+	@OneToMany(mappedBy = "users")
+	@JsonIgnore
+	private Set<Imports> imports = new HashSet<>();
 	
+	
+	
+	
+	public Users() {
+		super();
+	}
+
 	public Users(Long userId, String username, String password, String email, String fullName, String numberPhone,
 			String address, int gender, Date birthDay, String images, boolean enabled) {
 		this.userId = userId;
@@ -173,6 +187,18 @@ public class Users {
 
 	public void setUsers_roles(Set<Users_Roles> users_roles) {
 		this.users_roles = users_roles;
+	}
+	
+	
+	
+	
+
+	public Set<Imports> getImports() {
+		return imports;
+	}
+
+	public void setImports(Set<Imports> imports) {
+		this.imports = imports;
 	}
 
 	@Override

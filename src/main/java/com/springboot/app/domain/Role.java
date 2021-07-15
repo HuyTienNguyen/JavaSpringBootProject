@@ -34,7 +34,7 @@ public class Role {
 	 * 
 	 * @ManyToMany(fetch = FetchType.LAZY,mappedBy = "roles")
 	 */
-    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "role",cascade = CascadeType.MERGE)
     @JsonIgnore
     Set<Users_Roles> users_roles = new HashSet<>();
 

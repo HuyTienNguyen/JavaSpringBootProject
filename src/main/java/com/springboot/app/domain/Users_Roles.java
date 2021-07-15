@@ -2,6 +2,7 @@ package com.springboot.app.domain;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -49,5 +50,12 @@ public class Users_Roles {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "Users_Roles [ "+ "users " + users.getUserId() + ", role=" + role.getRoleId() + "]";
+	}
+	
+	
 	
 }

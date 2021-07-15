@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin}">
+<head>
+<title>Welcome to Our Site</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<section class="content">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Welcome to Our Site</h1>
+						<h4>Supplier</h4>
+					</div>
+				</div>
+				<div class="row justify-content-end">
+
+					<div class="mb-md-2">
+						<a href=""> <span> <a
+								onclick="event.preventDefault();addRole();" href="#"
+								class="btn btn-success" data-toggle="modal"><i
+									class="material-icons">&#xE147;</i> <span>Thêm nhà cung cấp</span></a>
+						</span>
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="table-responsive">
+						<!--HTML table-->
+						<table class="table table-striped table-bordered table-hover"
+							id="suppliertable">
+							<thead>
+								<tr>
+									<th  style="text-align: center">STT</th>
+									<th  style="text-align: center">Name</th>
+									<th  style="text-align: center">Address</th>
+									<th  style="text-align: center">Phone</th>
+									<th  style="text-align: center">Email</th>
+									<th  style="text-align: center">Description</th>
+									<th  style="text-align: center">Cooperation Day</th>
+									<th  style="text-align: center">Status</th>
+									<th  style="text-align: center">Optional</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Add Task Modal Form HTML -->
+		<form action="" method="" class="frmSupplier" id="frmSupplier">
+			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+			<div class="modal fade" id="modal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<div class="modal-header">
+
+							<h4 class="modal-title"></h4>
+							<button aria-hidden="true" class="close title-modal"
+								data-dismiss="modal" type="button">Supplier</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label> Name </label> <input class="form-control" name="name"
+									type="text" id="txtName"> </input> <span style="color: red"
+									id="errName"></span>
+
+							</div>
+							<div class="form-group">
+								<label> Address </label> <input class="form-control" name="address"
+									type="text" id="txtAddress"> </input>
+
+							</div>
+							<div class="form-group">
+								<label> Phone </label> <input class="form-control" name="phone"
+									type="text" id="txtPhone"> </input>
+
+							</div>
+							<div class="form-group">
+								<label> Email </label> <input class="form-control" name="email"
+									type="text" id="txtEmail"> </input>
+
+							</div>
+							<div class="form-group">
+								<label> Description </label> <input class="form-control" name="description"
+									type="text" id="txtDescription"> </input>
+
+							</div>
+							<div class="form-group select_option_status">
+								<label>Status</label>
+								<select class="form-control" name="status" id="txtStatus">
+									<option value="1" selected>Active</option>
+									<option value="0">Disabled</option>
+								</select>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input type="hidden" id="supplierId" name="supplierId"> <input
+								class="btn btn-default" data-dismiss="modal" type="button"
+								value="Cancel">
+							<button class="btn btn-info ship-btn-save" id="btnSubmit"
+								type="submit" value="add">Save Unit</button>
+								
+							</input>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			$(document)
+					.ready(
+							function() {
+								//load datatable
+								let urlSupplier = "/sample/admin/supplier";
+								$("#suppliertable")
+										.DataTable(
+												{
+													"responsive" : true,
+													ajax : {
+														"url" : urlSupplier
+																+ "/getSuppliers",
+														"type" : "GET",
+														dataSrc : ""
+													},
+													"columnDefs" : [ {
+														"className" : "dt-center",
+														"targets" : [ 0, 1, 2 ],
+														"orderable" : true
+													} ],
+													"columns" : [
+															{
+																"data" : "id"
+															},
+															{
+																"data" : "name"
+															},
+															{
+																"data" : "address"
+															},
+															{
+																"data" : "phone"
+															},
+															{
+																"data" : "email"
+															},
+															{
+																"data" : "description"
+															},
+															{
+																"data" : "cooperationDay"
+															},
+															{
+																"data" : "status"
+															},
+															{
+																"data" : "id",
+																render : function(
+																		data,
+																		type,
+																		full) {
+																	return '<a onclick="event.preventDefault();editSupplier('
+																			+ data
+																			+ ');" class = "btn btn-info btn-sm" href="#"> Edit </a>';
+																}
+															} ]
+												})
+							});
+			//add role
+			function addRole() {
+				$('#modal').modal('show');
+				$('.title-modal').text('Thêm nhà cung cấp');
+				$('#frmSupplier').attr('method', 'POST');
+				$("#frmSupplier")[0].reset();
+				$(".select_option_status").hide();
+			}
+
+			//edit role
+			function editSupplier(id) {
+				$.ajax({
+					type : 'GET',
+					url : 'supplier/' + id,
+					success : function(data) {
+						$('#modal').modal('show');
+						$('.title-modal').text('Sửa nhà cung cấp');
+						$('#frmSupplier').attr('method', 'PUT');
+						$('#supplierId').val(id);
+						$(".select_option_status").show();
+						//set value for field inputs
+					    for (var key in data) {
+					    	if(key != 'users_roles'){
+					    		$('#txt'+ key[0].toUpperCase() + key.slice(1).toLowerCase()).val(data[key]);
+					    	} 
+					    }
+					},
+					error: function(xhr){
+						alert('error');
+						console.log(xhr);
+					}
+				});
+				
+			}
+			//Ajax process Insert or Update
+			var $form = $('#frmSupplier');
+			$form.on('submit', function(e) {
+				e.preventDefault();
+				var Id = $("#supplierId").val();
+				
+				var data = $('#frmSupplier').serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+				
+				var type = $(this).attr('method');
+				var url = (type == "POST") ? '/sample/admin/supplier'
+						: '/sample/admin/supplier/' + Id;
+				
+				callAjax(url,type,JSON.stringify(data))
+				.then(function (data) {
+					$("#suppliertable").DataTable().ajax.reload();
+					showMessage("Thanh Cong", true);
+           		})
+            	.catch(function (xhr, status, error) {
+            		alert("error");
+            		console.log(xhr);
+            	});
+			});
+		</script>
+	</th:block>
+</body>
+</html>

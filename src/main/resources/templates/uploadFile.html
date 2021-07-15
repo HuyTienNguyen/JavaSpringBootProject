@@ -28,7 +28,8 @@
 			$(document).ready(function() {
 				// bind form submit event
 			    $("#file-upload-form").on("submit", function (e) {
-
+			    	e.preventDefault();
+					var data =  new FormData(this);
 			        // cancel the default behavior
 			        e.preventDefault();
 					var url = 'file-upload';
@@ -43,6 +44,7 @@
 			            cache: false,
 			            success: function (res) {
 			                alert(res);
+			                console.log(url);
 			            },
 			            error: function (err) {
 			                alert(err);
